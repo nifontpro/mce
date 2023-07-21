@@ -62,7 +62,7 @@ dependencies {
 	implementation(Compose.viewModelCompose)
 	implementation(Compose.activityCompose)
 	implementation(Compose.materialIcon)
-//	implementation(Compose.splashScreen)
+	implementation(Compose.splashScreen)
 //	implementation(Compose.permission)
 
 	implementation(DaggerHilt.hiltAndroid)
