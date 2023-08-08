@@ -5,7 +5,7 @@ buildscript {
 	}
 	dependencies {
 //        classpath(Build.androidBuildTools)
-		classpath("com.android.tools.build:gradle:8.0.2") // For update
+		classpath("com.android.tools.build:gradle:8.1.0") // For update
 
 		classpath(Build.hiltAndroidGradlePlugin)
 		classpath(Build.kotlinGradlePlugin)

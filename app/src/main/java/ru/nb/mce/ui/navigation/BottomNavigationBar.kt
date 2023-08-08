@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,26 +30,21 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 @Composable
 fun BottomNavigationBar(
 	items: List<BottomNavItem>,
-	navController: NavController,
 	modifier: Modifier = Modifier,
-	onItemClick: (BottomNavItem) -> Unit
+	onItemClick: (String) -> Unit,
+	isSelectItem: (String) -> Boolean,
 ) {
 	/*   val backgroundColor = Color(
 				 ColorUtils.blendARGB(MaterialTheme.colors.background.toArgb(), 0x000000, 0.2f)
 		 )*/
-	val backStackEntry = navController.currentBackStackEntryAsState()
+
 	BottomNavigation(
 		modifier = modifier,
 		backgroundColor = MaterialTheme.colors.primaryVariant,
 		elevation = 5.dp
 	) {
 		items.forEach { item ->
-
-//            Здесь recomposition не работает, т.к. это не State объект!!!
-//            val selected = item.route == navController.currentDestination?.route
-
-			val selected = item.route == backStackEntry.value?.destination?.route
-
+			val selected = isSelectItem(item.route)
 			val lineLength = animateFloatAsState(
 				targetValue = if (selected) 1f else 0f,
 				animationSpec = tween(
@@ -56,7 +55,7 @@ fun BottomNavigationBar(
 			BottomNavigationItem(
 				selected = selected,
 				onClick = {
-					onItemClick(item)
+					onItemClick(item.route)
 				},
 				selectedContentColor = selectedColor,
 				unselectedContentColor = selectedColor.copy(alpha = 0.9f),

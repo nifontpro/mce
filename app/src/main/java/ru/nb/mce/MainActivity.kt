@@ -11,6 +11,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.nb.mce.core_ui.Screen
@@ -85,8 +86,26 @@ private fun ConfigureExtNavigate() {
 @Composable
 private fun ConfigureBottomNavigate(extNavController: NavHostController) {
 	val navController = rememberNavController()
+	val backStackEntry = navController.currentBackStackEntryAsState()
 	Scaffold(
-		bottomBar = { BottomBar(navController) }
+		bottomBar = {
+			BottomBar(
+				onItemClick = { route ->
+					navController.navigate(route) {
+						navController.graph.startDestinationRoute?.let { route ->
+							popUpTo(route) {
+								saveState = true
+							}
+						}
+						launchSingleTop = true
+						restoreState = true
+					}
+				},
+				isSelectItem = { route ->
+					route == backStackEntry.value?.destination?.route
+				}
+			)
+		}
 	) { paddingValues ->
 		val bottomPadding = paddingValues.calculateBottomPadding()
 		NavHost(
